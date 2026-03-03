@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using CommandLine;
+﻿using CommandLine;
 using GrpcDotNetNamedPipes;
 using Lively.Commandline;
 using Lively.Common;
@@ -14,6 +14,7 @@ using Lively.Factories;
 using Lively.Grpc.Common.Proto.Commands;
 using Lively.Grpc.Common.Proto.Desktop;
 using Lively.Grpc.Common.Proto.Display;
+using Lively.Grpc.Common.Proto.Update;
 using Lively.Helpers;
 using Lively.Models.Enums;
 using Lively.Models.Services;
@@ -40,6 +41,7 @@ namespace Lively
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly NamedPipeServer grpcServer;
+        private int updateNotifyAmt = 1;
         private static Mutex mutex;
 
         private readonly IServiceProvider _serviceProvider;
@@ -209,7 +211,10 @@ namespace Lively
                 }
             };
 
-
+            var appUpdater = Services.GetRequiredService<IAppUpdaterService>();
+            appUpdater.UpdateChecked += AppUpdateChecked;
+            _ = appUpdater.CheckUpdate(30 * 1000);
+            appUpdater.Start();
         }
 
         private IServiceProvider ConfigureServices()
@@ -225,6 +230,7 @@ namespace Lively
                 .AddSingleton<IPlayback, Playback>()
                 .AddSingleton<IRunnerService, RunnerService>()
                 .AddSingleton<ISystray, Systray>()
+                .AddSingleton<IAppUpdaterService, GithubUpdaterService>()
                 .AddSingleton<ITransparentTbService, TranslucentTBService>()
                 .AddSingleton<RawInputMsgWindow>()
                 .AddSingleton<WndProcMsgWindow>()
@@ -232,6 +238,7 @@ namespace Lively
                 .AddSingleton<DisplayManagerServer>()
                 .AddSingleton<UserSettingsServer>()
                 .AddSingleton<CommandsServer>()
+                .AddSingleton<AppUpdateServer>()
                 .AddSingleton<IResourceService, ResourceService>()
                 .AddSingleton<IWindowService, WindowService>()
                 // Transient
@@ -270,6 +277,7 @@ namespace Lively
             Grpc.Common.Proto.Settings.SettingsService.BindService(server.ServiceBinder, Services.GetRequiredService<UserSettingsServer>());
             DisplayService.BindService(server.ServiceBinder, Services.GetRequiredService<DisplayManagerServer>());
             CommandsService.BindService(server.ServiceBinder, Services.GetRequiredService<CommandsServer>());
+            UpdateService.BindService(server.ServiceBinder, Services.GetRequiredService<AppUpdateServer>());
             server.Start();
 
             return server;
@@ -309,7 +317,24 @@ namespace Lively
             currentTheme = theme;
         }
 
+        private void AppUpdateChecked(object sender, AppUpdaterEventArgs e)
+        {
+            _ = Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new ThreadStart(delegate
+            {
+                Logger.Info($"AppUpdate status: {e.UpdateStatus}");
+                if (e.UpdateStatus != AppUpdateStatus.available || updateNotifyAmt <= 0)
+                    return;
 
+                updateNotifyAmt--;
+                // If interface is visible then skip (shown in-app instead.)
+                if (!Services.GetRequiredService<IRunnerService>().IsVisibleUI)
+                {
+                    Services.GetRequiredService<ISystray>().ShowBalloonNotification(4000,
+                        "Lively Wallpaper",
+                        Lively.Properties.Resources.TextUpdateAvailable);
+                }
+            }));
+        }
 
         private void SetupUnhandledExceptionLogging()
         {

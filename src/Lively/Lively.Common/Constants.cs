@@ -1,4 +1,4 @@
-using Lively.Common.Helpers;
+﻿using Lively.Common.Helpers;
 using Lively.Models.Enums;
 using System;
 using System.IO;

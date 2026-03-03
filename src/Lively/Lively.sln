@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
@@ -19,19 +19,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lively.Utility.ConsoleDemo"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lively.Grpc.Client", "Lively.Grpc.Client\Lively.Grpc.Client.csproj", "{E2DD302F-D4EA-45EF-9F79-46BFAB8A3A1D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lively.UI.WinUI", "Lively.UI.WinUI\Lively.UI.WinUI.csproj", "{418B6EB5-1874-4681-89F8-6BC393AB2DC0}"
-EndProject
+
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lively.Utility.Commandline", "Lively.Utility.Commandline\Lively.Utility.Commandline.csproj", "{CE0921CD-1236-41AA-BD1A-501BDF9C99AF}"
 EndProject
-
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lively.Gallery.Client", "Lively.Gallery.Client\Lively.Gallery.Client.csproj", "{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lively.Common.Services", "Lively.Common.Services\Lively.Common.Services.csproj", "{4CA97F56-6D6D-4CE6-AF29-8EEBD4BEEFEB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lively.ML", "Lively.ML\Lively.ML.csproj", "{DD803B4B-E0A1-4C28-8473-9A7EB17D58B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lively.Utility.Screensaver", "Lively.Utility.Screensaver\Lively.Utility.Screensaver.csproj", "{DE3A7521-77D2-462A-A25D-BF020EA5A77B}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lively.UI.Shared", "Lively.UI.Shared\Lively.UI.Shared.shproj", "{0C64467B-8EF0-4896-85B1-0D8020ECEAB3}"
-EndProject
+
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lively.Player.CefSharp", "Lively.Player.CefSharp\Lively.Player.CefSharp.csproj", "{54F4EEB1-E233-4485-8BF9-60D731046CB2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lively.Player.WebView2", "Lively.Player.WebView2\Lively.Player.WebView2.csproj", "{1389A0F1-2E46-4E3D-91AD-F6572B0D744F}"
@@ -178,28 +177,7 @@ Global
 		{E2DD302F-D4EA-45EF-9F79-46BFAB8A3A1D}.Release|x64.Build.0 = Release|Any CPU
 		{E2DD302F-D4EA-45EF-9F79-46BFAB8A3A1D}.Release|x86.ActiveCfg = Release|Any CPU
 		{E2DD302F-D4EA-45EF-9F79-46BFAB8A3A1D}.Release|x86.Build.0 = Release|Any CPU
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|Any CPU.Build.0 = Debug|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|Any CPU.Deploy.0 = Debug|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|arm64.ActiveCfg = Debug|arm64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|arm64.Build.0 = Debug|arm64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|arm64.Deploy.0 = Debug|arm64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|x64.ActiveCfg = Debug|x64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|x64.Build.0 = Debug|x64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|x64.Deploy.0 = Debug|x64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|x86.ActiveCfg = Debug|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|x86.Build.0 = Debug|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Debug|x86.Deploy.0 = Debug|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|Any CPU.ActiveCfg = Release|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|arm64.ActiveCfg = Release|arm64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|arm64.Build.0 = Release|arm64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|arm64.Deploy.0 = Release|arm64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|x64.ActiveCfg = Release|x64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|x64.Build.0 = Release|x64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|x64.Deploy.0 = Release|x64
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|x86.ActiveCfg = Release|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|x86.Build.0 = Release|x86
-		{418B6EB5-1874-4681-89F8-6BC393AB2DC0}.Release|x86.Deploy.0 = Release|x86
+
 		{CE0921CD-1236-41AA-BD1A-501BDF9C99AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CE0921CD-1236-41AA-BD1A-501BDF9C99AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE0921CD-1236-41AA-BD1A-501BDF9C99AF}.Debug|arm64.ActiveCfg = Debug|Any CPU
@@ -216,7 +194,22 @@ Global
 		{CE0921CD-1236-41AA-BD1A-501BDF9C99AF}.Release|x64.Build.0 = Release|x64
 		{CE0921CD-1236-41AA-BD1A-501BDF9C99AF}.Release|x86.ActiveCfg = Release|Any CPU
 		{CE0921CD-1236-41AA-BD1A-501BDF9C99AF}.Release|x86.Build.0 = Release|Any CPU
-
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Debug|arm64.Build.0 = Debug|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Debug|x64.Build.0 = Debug|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Debug|x86.Build.0 = Debug|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Release|arm64.ActiveCfg = Release|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Release|arm64.Build.0 = Release|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Release|x64.ActiveCfg = Release|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Release|x64.Build.0 = Release|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Release|x86.ActiveCfg = Release|Any CPU
+		{B4A45D65-7AB7-434A-A59E-37FBB7C98ADA}.Release|x86.Build.0 = Release|Any CPU
 		{4CA97F56-6D6D-4CE6-AF29-8EEBD4BEEFEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4CA97F56-6D6D-4CE6-AF29-8EEBD4BEEFEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CA97F56-6D6D-4CE6-AF29-8EEBD4BEEFEB}.Debug|arm64.ActiveCfg = Debug|Any CPU
@@ -320,8 +313,5 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {96586925-06A4-4201-84E5-DD8ED237CC7E}
 	EndGlobalSection
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Lively.UI.Shared\Lively.UI.Shared.projitems*{0c64467b-8ef0-4896-85b1-0d8020eceab3}*SharedItemsImports = 13
-		Lively.UI.Shared\Lively.UI.Shared.projitems*{418b6eb5-1874-4681-89f8-6bc393ab2dc0}*SharedItemsImports = 5
-	EndGlobalSection
+
 EndGlobal

@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using Lively.Common;
+﻿using Lively.Common;
 using Lively.Common.Factories;
 using Lively.Common.Helpers;
 using Lively.Common.Services;
@@ -36,6 +36,7 @@ namespace Lively.Services
         private readonly IDesktopCore desktopCore;
         private readonly IDisplayManager displayManager;
         private readonly IUserSettingsService userSettings;
+        private readonly IAppUpdaterService appUpdater;
         private readonly IWallpaperLibraryFactory wallpaperLibraryFactory;
 
         private AppTheme? currentTheme = null;
@@ -44,6 +45,7 @@ namespace Lively.Services
             IRunnerService runner,
             IUserSettingsService userSettings,
             IDesktopCore desktopCore,
+            IAppUpdaterService appUpdater,
             IDisplayManager displayManager,
             IPlayback playbackMonitor,
             IWindowService windowService,
@@ -54,6 +56,7 @@ namespace Lively.Services
             this.desktopCore = desktopCore;
             this.userSettings = userSettings;
             this.displayManager = displayManager;
+            this.appUpdater = appUpdater;
             this.wallpaperLibraryFactory = wallpaperLibraryFactory;
 
             // NotifyIcon Issue: "The root Visual of a VisualTarget cannot have a parent.."
@@ -112,7 +115,18 @@ namespace Lively.Services
             notifyIcon.ContextMenuStrip.Items.Add(customiseWallpaperMenu);
             trayMenuItems[TrayMenuItem.customiseWallpaper] = customiseWallpaperMenu;
 
-
+            // Update check, only create on installer build.
+            if (!PackageUtil.IsRunningAsPackaged)
+            {
+                var updateTrayMenu = new ToolStripMenuItem(GetMenuItemString(TrayMenuItem.updateApp), null)
+                {
+                    Enabled = false
+                };
+                updateTrayMenu.Click += (s, e) => runner.ShowAppUpdatePage();
+                notifyIcon.ContextMenuStrip.Items.Add(CreateToolStripSeparator(toolStripColor));
+                notifyIcon.ContextMenuStrip.Items.Add(updateTrayMenu);
+                trayMenuItems[TrayMenuItem.updateApp] = updateTrayMenu;
+            }
 
             var reportBugTrayMenu = new ToolStripMenuItem(GetMenuItemString(TrayMenuItem.reportBug), Properties.Icons.icons8_website_bug_96);
             reportBugTrayMenu.Click += (s, e) => windowService.ShowDiagnosticWindow();
@@ -128,6 +142,7 @@ namespace Lively.Services
 
             playbackMonitor.PlaybackPolicyChanged += Playback_PlaybackStateChanged;
             desktopCore.WallpaperChanged += DesktopCore_WallpaperChanged;
+            appUpdater.UpdateChecked += (s, e) => { SetUpdateMenu(e.UpdateStatus); };
             i18n.CultureChanged += I18n_CultureChanged;
         }
 
@@ -241,6 +256,36 @@ namespace Lively.Services
             }
         }
 
+        private void SetUpdateMenu(AppUpdateStatus status)
+        {
+            if (!trayMenuItems.TryGetValue(TrayMenuItem.updateApp, out ToolStripMenuItem updateTrayMenu))
+                return;
+
+            switch (status)
+            {
+                case AppUpdateStatus.uptodate:
+                    updateTrayMenu.Enabled = false;
+                    updateTrayMenu.Text = i18n.GetString("TextUpdateUptodate");
+                    break;
+                case AppUpdateStatus.available:
+                    updateTrayMenu.Enabled = true;
+                    updateTrayMenu.Text = i18n.GetString("TextUpdateAvailable");
+                    break;
+                case AppUpdateStatus.invalid:
+                    updateTrayMenu.Enabled = false;
+                    updateTrayMenu.Text = "Fancy~";
+                    break;
+                case AppUpdateStatus.notchecked:
+                    updateTrayMenu.Enabled = false;
+                    updateTrayMenu.Text = i18n.GetString("TextUpdateChecking");
+                    break;
+                case AppUpdateStatus.error:
+                    updateTrayMenu.Enabled = true;
+                    updateTrayMenu.Text = i18n.GetString("TextupdateCheckFail");
+                    break;
+            }
+        }
+
         private void I18n_CultureChanged(object sender, string e)
         {
             foreach (TrayMenuItem item in Enum.GetValues(typeof(TrayMenuItem)))
@@ -248,6 +293,7 @@ namespace Lively.Services
                 if (trayMenuItems.TryGetValue(item, out var menuItem))
                     menuItem.Text = GetMenuItemString(item);
             }
+            SetUpdateMenu(appUpdater.Status);
         }
 
         /// <summary>
@@ -355,6 +401,7 @@ namespace Lively.Services
                 TrayMenuItem.exitApp => i18n.GetString("TextExit"),
                 TrayMenuItem.pauseWallpaper => i18n.GetString("TextPauseWallpapers"),
                 TrayMenuItem.customiseWallpaper => i18n.GetString("TextCustomiseWallpaper"),
+                TrayMenuItem.updateApp => i18n.GetString("TextUpdateChecking"),
                 _ => throw new NotImplementedException(),
             };
         }
@@ -368,7 +415,8 @@ namespace Lively.Services
             reportBug,
             exitApp,
             pauseWallpaper,
-            customiseWallpaper
+            customiseWallpaper,
+            updateApp
         }
 
         protected virtual void Dispose(bool disposing)

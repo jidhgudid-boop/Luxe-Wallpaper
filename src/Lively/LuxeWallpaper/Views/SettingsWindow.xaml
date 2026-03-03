@@ -1,0 +1,1225 @@
+<Window x:Class="LuxeWallpaper.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="设置" 
+        Height="600" 
+        Width="900"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <!-- 导航项样式 -->
+        <Style x:Key="NavItemStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#B0B0C0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="NavBorder" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                Padding="{TemplateBinding Padding}">
+                            <Grid VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter x:Name="IconPresenter" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <ContentPresenter x:Name="TextPresenter" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="NavBorder" Property="Background" Value="#15FFFFFF"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 激活的导航项样式 -->
+        <Style x:Key="ActiveNavItemStyle" TargetType="Button" BasedOn="{StaticResource NavItemStyle}">
+            <Setter Property="Background" Value="#20FFFFFF"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+        </Style>
+
+        <!-- 渲染性能按钮样式 -->
+        <Style x:Key="RenderPerfButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#252540"/>
+            <Setter Property="Foreground" Value="#B0B0C0"/>
+            <Setter Property="BorderBrush" Value="#404050"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="56"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding Content}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#2A2A4A"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#505060"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 渲染性能按钮激活样式 -->
+        <Style x:Key="RenderPerfButtonActiveStyle" TargetType="Button" BasedOn="{StaticResource RenderPerfButtonStyle}">
+            <Setter Property="Background" Value="#3A3A5A"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#505060"/>
+        </Style>
+
+        <!-- 黄色按钮样式 - 带耀光效果 -->
+        <Style x:Key="YellowButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#F5D98A"/>
+            <Setter Property="Foreground" Value="#1A1A2E"/>
+            <Setter Property="BorderBrush" Value="#F8E4A8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding Content}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#F8E8B8"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#FFF0C8"/>
+                                <Setter TargetName="ButtonBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="15" ShadowDepth="0" Color="#F5D98A" Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 玻璃卡片样式 -->
+        <Style x:Key="GlassCardStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+            <Setter Property="Background" Value="#10FFFFFF"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+
+        <!-- 玻璃开关样式 -->
+        <Style x:Key="GlassToggleStyle" TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid Width="44" Height="24">
+                            <Border x:Name="ToggleBackground" 
+                                    Width="44" 
+                                    Height="24" 
+                                    CornerRadius="12" 
+                                    Background="#30FFFFFF"
+                                    BorderBrush="#40FFFFFF"
+                                    BorderThickness="1"/>
+                            <Ellipse x:Name="ToggleKnob" 
+                                     Width="18" 
+                                     Height="18" 
+                                     Fill="#FFFFFF" 
+                                     HorizontalAlignment="Left"
+                                     Margin="3,0,0,0">
+                                <Ellipse.Effect>
+                                    <DropShadowEffect BlurRadius="4" ShadowDepth="0" Color="#000000" Opacity="0.3"/>
+                                </Ellipse.Effect>
+                            </Ellipse>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="ToggleBackground" Property="Background" Value="#6B8DD6"/>
+                                <Setter TargetName="ToggleBackground" Property="BorderBrush" Value="#8BA8E8"/>
+                                <Setter TargetName="ToggleKnob" Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="ToggleKnob" Property="Margin" Value="0,0,3,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 玻璃输入框样式 -->
+        <Style x:Key="GlassInputStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#30FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="InputBorder" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="InputBorder" Property="BorderBrush" Value="#60FFFFFF"/>
+                                <Setter TargetName="InputBorder" Property="Background" Value="#20FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 深色滚动条样式 - 参考图二细化 -->
+        <Style x:Key="DarkScrollBarThumb" TargetType="Thumb">
+            <Setter Property="Background" Value="#6A6A7A"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="2"
+                                Opacity="0.6"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#8A8A9A"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DarkScrollBarStyle" TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Width" Value="6"/>
+            <Setter Property="Margin" Value="2,4,2,4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="Transparent" Width="6">
+                            <!-- 轨道背景 -->
+                            <Border Background="#2A2A3A" 
+                                    CornerRadius="3" 
+                                    Opacity="0.5"
+                                    Margin="2,0"/>
+                            <Track x:Name="PART_Track"
+                                   IsDirectionReversed="True"
+                                   IsEnabled="True"
+                                   Margin="1,2">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand"
+                                                  Opacity="0"
+                                                  Background="Transparent"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand"
+                                                  Opacity="0"
+                                                  Background="Transparent"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource DarkScrollBarThumb}" Width="4"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DarkScrollViewerStyle" TargetType="ScrollViewer">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollViewer">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ScrollContentPresenter Grid.Column="0" Margin="0,0,2,0"/>
+                            <ScrollBar x:Name="PART_VerticalScrollBar"
+                                       Grid.Column="1"
+                                       Orientation="Vertical"
+                                       Value="{TemplateBinding VerticalOffset}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                       Style="{StaticResource DarkScrollBarStyle}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 覆盖系统焦点样式 -->
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2A2A3A"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#2A2A3A"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#252530"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#FFFFFF"/>
+
+        <!-- 液态玻璃文字效果 -->
+        <Style x:Key="LiquidGlassTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" Color="#FFFFFF" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LiquidGlassSubtitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#E8E8F0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="0" Color="#FFFFFF" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LiquidGlassTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#C0C0D0"/>
+        </Style>
+
+        <Style x:Key="LiquidGlassLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="6" ShadowDepth="0" Color="#FFFFFF" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 玻璃下拉框样式 -->
+        <Style x:Key="GlassComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="#2A2A3A"/>
+            <Setter Property="BorderBrush" Value="#404050"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="UseLayoutRounding" Value="True"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid x:Name="MainGrid" SnapsToDevicePixels="True" UseLayoutRounding="True">
+                            <Border x:Name="MainBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    SnapsToDevicePixels="True">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="24"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="ContentText"
+                                               Grid.Column="0"
+                                               Text="{TemplateBinding SelectionBoxItem}"
+                                               Foreground="{TemplateBinding Foreground}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Margin="8,0,0,0"/>
+                                    <Path x:Name="DropDownArrow"
+                                          Grid.Column="1"
+                                          Data="M0,0 L4,4 L8,0"
+                                          Stroke="#B0B0C0"
+                                          StrokeThickness="1.5"
+                                          Width="8"
+                                          Height="4"
+                                          Stretch="None"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                            <ToggleButton x:Name="ToggleButton"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          HorizontalContentAlignment="Stretch"
+                                          VerticalContentAlignment="Stretch"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press"
+                                          Focusable="False"
+                                          FocusVisualStyle="{x:Null}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="Transparent"/>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   PlacementTarget="{Binding ElementName=MainGrid}"
+                                   IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                   AllowsTransparency="True"
+                                   PopupAnimation="None"
+                                   VerticalOffset="4"
+                                   StaysOpen="False"
+                                   Focusable="False">
+                                <Border x:Name="DropDownBorder"
+                                        Background="#252530"
+                                        BorderBrush="#404050"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Width="{Binding ActualWidth, ElementName=MainGrid}"
+                                        MaxHeight="200"
+                                        SnapsToDevicePixels="True"
+                                        UseLayoutRounding="True">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="15" ShadowDepth="0" Color="#000000" Opacity="0.6"/>
+                                    </Border.Effect>
+                                    <ScrollViewer Margin="4"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  Style="{StaticResource DarkScrollViewerStyle}">
+                                        <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="DropDownArrow" Property="Data" Value="M0,4 L4,0 L8,4"/>
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#505060"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#505060"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#505060"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Padding" Value="8,6"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="OverridesDefaultStyle" Value="True"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <Border x:Name="ItemBorder"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="4"
+                                            Padding="{TemplateBinding Padding}"
+                                            SnapsToDevicePixels="True">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="ItemBorder" Property="Background" Value="#4A4A5A"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="ItemBorder" Property="Background" Value="#3A3A4A"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 关闭按钮样式 -->
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="CloseBorder" 
+                                Width="32" 
+                                Height="32" 
+                                CornerRadius="16" 
+                                Background="{TemplateBinding Background}">
+                            <Path Data="M10,10L22,22M10,22L22,10" 
+                                  Stroke="#80FFFFFF" 
+                                  StrokeThickness="2" 
+                                  Width="12" 
+                                  Height="12" 
+                                  Stretch="Uniform" 
+                                  HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CloseBorder" Property="Background" Value="#20FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 图标路径数据 -->
+        <Geometry x:Key="IconPower">M12,2 C6.48,2 2,6.48 2,12 C2,17.52 6.48,22 12,22 C17.52,22 22,17.52 22,12 C22,6.48 17.52,2 12,2 Z M13,17 L11,17 L11,15 L13,15 L13,17 Z M13,13 L11,13 L11,7 L13,7 L13,13 Z</Geometry>
+        <Geometry x:Key="IconEngine">M12,2 L2,7 L12,12 L22,7 L12,2 Z M2,17 L12,22 L22,17 M2,12 L12,17 L22,12</Geometry>
+        <Geometry x:Key="IconWallpaper">M4,4 L20,4 L20,20 L4,20 Z M4,14 L9,9 L13,13 L16,10 L20,14 L20,20 L4,20 Z M8,8 C9.1,8 10,8.9 10,10 C10,11.1 9.1,12 8,12 C6.9,12 6,11.1 6,10 C6,8.9 6.9,8 8,8 Z</Geometry>
+        <Geometry x:Key="IconDownload">M19,9 L15,9 L15,3 L9,3 L9,9 L5,9 L12,16 L19,9 Z M5,18 L19,18 L19,20 L5,20 Z</Geometry>
+        <Geometry x:Key="IconUpdate">M12,4 L12,1 L8,5 L12,9 L12,6 C15.31,6 18,8.69 18,12 C18,15.31 15.31,18 12,18 C8.69,18 6,15.31 6,12 L4,12 C4,16.42 7.58,20 12,20 C16.42,20 20,16.42 20,12 C20,7.58 16.42,4 12,4 Z</Geometry>
+        <Geometry x:Key="IconStartup">M13,3 L11,3 L11,13 L13,13 L13,3 Z M17.59,5.59 L16.17,7 C17.45,8.28 18.29,10 18.29,12 C18.29,16.03 15.03,19.29 11,19.29 C6.97,19.29 3.71,16.03 3.71,12 C3.71,10 4.55,8.28 5.83,7 L4.41,5.59 C2.74,7.26 1.71,9.5 1.71,12 C1.71,17.08 5.92,21.29 11,21.29 C16.08,21.29 20.29,17.08 20.29,12 C20.29,9.5 19.26,7.26 17.59,5.59 Z</Geometry>
+        <Geometry x:Key="IconAbout">M12,2 C6.48,2 2,6.48 2,12 C2,17.52 6.48,22 12,22 C17.52,22 22,17.52 22,12 C22,6.48 17.52,2 12,2 Z M13,17 L11,17 L11,11 L13,11 L13,17 Z M13,9 L11,9 L11,7 L13,7 L13,9 Z</Geometry>
+        <Geometry x:Key="IconExit">M10.09,15.59 L11.5,17 L16.5,12 L11.5,7 L10.09,8.41 L12.67,11 L3,11 L3,13 L12.67,13 L10.09,15.59 Z M19,3 L5,3 C3.89,3 3,3.9 3,5 L3,9 L5,9 L5,5 L19,5 L19,19 L5,19 L5,15 L3,15 L3,19 C3,20.1 3.89,21 5,21 L19,21 C20.1,21 21,20.1 21,19 L21,5 C21,3.9 20.1,3 19,3 Z</Geometry>
+    </Window.Resources>
+
+    <!-- 主容器 - 透明背景 -->
+    <Border CornerRadius="16" 
+            BorderBrush="#30FFFFFF" 
+            BorderThickness="1">
+        <Border.Background>
+            <SolidColorBrush Color="#0D0D18" Opacity="0.85"/>
+        </Border.Background>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="40" ShadowDepth="0" Color="#000000" Opacity="0.6"/>
+        </Border.Effect>
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- 标题栏 -->
+            <Grid Grid.Row="0" Height="56" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" 
+                           Text="设置" 
+                           Foreground="#FFFFFF" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           VerticalAlignment="Center"
+                           Margin="20,0"/>
+                
+                <Button Grid.Column="2" 
+                        Style="{StaticResource CloseButtonStyle}" 
+                        Margin="0,0,16,0"
+                        Click="CloseButton_Click"/>
+            </Grid>
+
+            <!-- 内容区域 -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 左侧导航栏 -->
+                <Border Grid.Column="0" 
+                        Background="#081A1A2E" 
+                        BorderBrush="#15151525" 
+                        BorderThickness="0,1,1,0"
+                        CornerRadius="0,0,0,16">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="12,16">
+                            <!-- 节能设置 -->
+                            <Button x:Name="NavPower" 
+                                    Style="{StaticResource ActiveNavItemStyle}" 
+                                    Margin="0,2"
+                                    Click="NavItem_Click"
+                                    Tag="0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0" 
+                                          Data="{StaticResource IconPower}" 
+                                          Fill="#FFFFFF"
+                                          Width="18" 
+                                          Height="18" 
+                                          Stretch="Uniform"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Text="节能设置" 
+                                               Margin="12,0,0,0"
+                                               Foreground="#FFFFFF"/>
+                                </Grid>
+                            </Button>
+
+                            <!-- 渲染引擎 -->
+                            <Button x:Name="NavEngine" 
+                                    Style="{StaticResource NavItemStyle}" 
+                                    Margin="0,2"
+                                    Click="NavItem_Click"
+                                    Tag="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0" 
+                                          Data="{StaticResource IconEngine}" 
+                                          Fill="#B0B0C0"
+                                          Width="18" 
+                                          Height="18" 
+                                          Stretch="Uniform"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Text="渲染引擎" 
+                                               Margin="12,0,0,0"
+                                               Foreground="#B0B0C0"/>
+                                </Grid>
+                            </Button>
+
+                            <!-- 壁纸设置 -->
+                            <Button x:Name="NavWallpaper" 
+                                    Style="{StaticResource NavItemStyle}" 
+                                    Margin="0,2"
+                                    Click="NavItem_Click"
+                                    Tag="2">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0" 
+                                          Data="{StaticResource IconWallpaper}" 
+                                          Fill="#B0B0C0"
+                                          Width="18" 
+                                          Height="18" 
+                                          Stretch="Uniform"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Text="壁纸设置" 
+                                               Margin="12,0,0,0"
+                                               Foreground="#B0B0C0"/>
+                                </Grid>
+                            </Button>
+
+                            <!-- 下载管理 -->
+                            <Button x:Name="NavDownload" 
+                                    Style="{StaticResource NavItemStyle}" 
+                                    Margin="0,2"
+                                    Click="NavItem_Click"
+                                    Tag="3">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0" 
+                                          Data="{StaticResource IconDownload}" 
+                                          Fill="#B0B0C0"
+                                          Width="18" 
+                                          Height="18" 
+                                          Stretch="Uniform"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Text="下载管理" 
+                                               Margin="12,0,0,0"
+                                               Foreground="#B0B0C0"/>
+                                </Grid>
+                            </Button>
+
+                            <!-- 检查更新 -->
+                            <Button x:Name="NavUpdate" 
+                                    Style="{StaticResource NavItemStyle}" 
+                                    Margin="0,2"
+                                    Click="NavItem_Click"
+                                    Tag="4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0" 
+                                          Data="{StaticResource IconUpdate}" 
+                                          Fill="#B0B0C0"
+                                          Width="18" 
+                                          Height="18" 
+                                          Stretch="Uniform"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Text="检查更新" 
+                                               Margin="12,0,0,0"
+                                               Foreground="#B0B0C0"/>
+                                </Grid>
+                            </Button>
+
+                            <!-- 开机自启 -->
+                            <Button x:Name="NavStartup" 
+                                    Style="{StaticResource NavItemStyle}" 
+                                    Margin="0,2"
+                                    Click="NavItem_Click"
+                                    Tag="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0" 
+                                          Data="{StaticResource IconStartup}" 
+                                          Fill="#B0B0C0"
+                                          Width="18" 
+                                          Height="18" 
+                                          Stretch="Uniform"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Text="开机自启" 
+                                               Margin="12,0,0,0"
+                                               Foreground="#B0B0C0"/>
+                                </Grid>
+                            </Button>
+
+                            <!-- 关于软件 -->
+                            <Button x:Name="NavAbout" 
+                                    Style="{StaticResource NavItemStyle}" 
+                                    Margin="0,2"
+                                    Click="NavItem_Click"
+                                    Tag="6">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0" 
+                                          Data="{StaticResource IconAbout}" 
+                                          Fill="#B0B0C0"
+                                          Width="18" 
+                                          Height="18" 
+                                          Stretch="Uniform"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Text="关于软件" 
+                                               Margin="12,0,0,0"
+                                               Foreground="#B0B0C0"/>
+                                </Grid>
+                            </Button>
+
+                            <!-- 退出授权 -->
+                            <Button x:Name="NavExit" 
+                                    Style="{StaticResource NavItemStyle}" 
+                                    Margin="0,2"
+                                    Click="NavItem_Click"
+                                    Tag="7">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="28"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Grid.Column="0" 
+                                          Data="{StaticResource IconExit}" 
+                                          Fill="#B0B0C0"
+                                          Width="18" 
+                                          Height="18" 
+                                          Stretch="Uniform"/>
+                                    <TextBlock Grid.Column="1" 
+                                               Text="退出授权" 
+                                               Margin="12,0,0,0"
+                                               Foreground="#B0B0C0"/>
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- 右侧内容区域 -->
+                <Border Grid.Column="1" 
+                        CornerRadius="0,0,16,0"
+                        BorderBrush="#15151525" 
+                        BorderThickness="0,1,0,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid x:Name="PageContent" Margin="24">
+                            
+                            <!-- 节能设置页面 -->
+                            <StackPanel x:Name="Page0">
+                                <TextBlock Text="节能设置" 
+                                           Style="{StaticResource LiquidGlassTitleStyle}"
+                                           Margin="0,0,0,24"/>
+                                
+                                <!-- 启用节能模式 -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <CheckBox x:Name="PowerSavingMode"
+                                              Style="{StaticResource GlassToggleStyle}"
+                                              VerticalAlignment="Center"/>
+                                    <TextBlock Text="启用节能模式" 
+                                               Style="{StaticResource LiquidGlassLabelStyle}"
+                                               VerticalAlignment="Center"
+                                               Margin="12,0,0,0"/>
+                                </StackPanel>
+                                
+                                <!-- 动态壁纸覆盖阈值 -->
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,20">
+                                    <TextBlock Text="动态壁纸被综合覆盖 %" 
+                                               Style="{StaticResource LiquidGlassTextStyle}"
+                                               VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="PowerThreshold" 
+                                              Style="{StaticResource GlassComboBoxStyle}" 
+                                              Width="60"
+                                              Margin="8,0"
+                                              SelectedIndex="8">
+                                        <ComboBoxItem Content="40"/>
+                                        <ComboBoxItem Content="45"/>
+                                        <ComboBoxItem Content="50"/>
+                                        <ComboBoxItem Content="55"/>
+                                        <ComboBoxItem Content="60"/>
+                                        <ComboBoxItem Content="65"/>
+                                        <ComboBoxItem Content="70"/>
+                                        <ComboBoxItem Content="75"/>
+                                        <ComboBoxItem Content="80"/>
+                                        <ComboBoxItem Content="85"/>
+                                        <ComboBoxItem Content="90"/>
+                                        <ComboBoxItem Content="95"/>
+                                        <ComboBoxItem Content="100"/>
+                                    </ComboBox>
+                                    <TextBlock Text="时停止渲染" 
+                                               Style="{StaticResource LiquidGlassTextStyle}"
+                                               VerticalAlignment="Center"
+                                               Margin="8,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- 渲染引擎页面 -->
+                            <StackPanel x:Name="Page1" Visibility="Collapsed">
+                                <TextBlock Text="渲染引擎" 
+                                           Style="{StaticResource LiquidGlassTitleStyle}"
+                                           Margin="0,0,0,24"/>
+                                
+                                <!-- 引擎选择 + 启用硬件加速 -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                                    <ComboBox x:Name="EngineSelector"
+                                              Style="{StaticResource GlassComboBoxStyle}" 
+                                              Width="140"
+                                              Margin="0,0,16,0"
+                                              SelectedIndex="0">
+                                        <ComboBoxItem Content="高性能引擎"/>
+                                        <ComboBoxItem Content="多功能引擎"/>
+                                    </ComboBox>
+                                    <CheckBox x:Name="EnableHardwareAcceleration"
+                                              Style="{StaticResource GlassToggleStyle}"
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,8,0"/>
+                                    <TextBlock Text="启用硬件加速" 
+                                               Style="{StaticResource LiquidGlassLabelStyle}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                                
+                                <!-- 渲染性能 -->
+                                <TextBlock Text="渲染性能" 
+                                           Style="{StaticResource LiquidGlassSubtitleStyle}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="低则降低硬件使用率（该设置只针对高质量动态壁纸生效）" 
+                                           Style="{StaticResource LiquidGlassTextStyle}"
+                                           Foreground="#808090"
+                                           Margin="0,0,0,16"/>
+                                
+                                <!-- 低/中/高 选项 -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="8"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="8"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="RenderLow"
+                                            Grid.Column="0"
+                                            Content="低"
+                                            Style="{StaticResource RenderPerfButtonStyle}"
+                                            Click="RenderPerformance_Click"
+                                            Tag="Low"/>
+                                    <Button x:Name="RenderMedium"
+                                            Grid.Column="2"
+                                            Content="中"
+                                            Style="{StaticResource RenderPerfButtonActiveStyle}"
+                                            Click="RenderPerformance_Click"
+                                            Tag="Medium"/>
+                                    <Button x:Name="RenderHigh"
+                                            Grid.Column="4"
+                                            Content="高"
+                                            Style="{StaticResource RenderPerfButtonStyle}"
+                                            Click="RenderPerformance_Click"
+                                            Tag="High"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- 壁纸设置页面 -->
+                            <StackPanel x:Name="Page2" Visibility="Collapsed">
+                                <TextBlock Text="壁纸设置" 
+                                           Style="{StaticResource LiquidGlassTitleStyle}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="指动态壁纸相关视觉配置" 
+                                           Style="{StaticResource LiquidGlassTextStyle}"
+                                           Foreground="#808090"
+                                           Margin="0,0,0,24"/>
+                                
+                                <!-- 淡入淡出 -->
+                                <TextBlock Text="淡入淡出" 
+                                           Style="{StaticResource LiquidGlassSubtitleStyle}"
+                                           Margin="0,0,0,12"/>
+                                <Grid Margin="0,0,0,24">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="12"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="FadeInOutEnable"
+                                            Grid.Column="0"
+                                            Height="80"
+                                            Style="{StaticResource RenderPerfButtonActiveStyle}"
+                                            Click="FadeInOut_Click"
+                                            Tag="Enable">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Path Data="M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5M12,17C9.24,17 7,14.76 7,12C7,9.24 9.24,7 12,7C14.76,7 17,9.24 17,12C17,14.76 14.76,17 12,17M12,9C10.34,9 9,10.34 9,12C9,13.66 10.34,15 12,15C13.66,15 15,13.66 15,12C15,10.34 13.66,9 12,9Z" 
+                                                  Fill="#FFFFFF" 
+                                                  Width="24" 
+                                                  Height="24"
+                                                  Stretch="Uniform"
+                                                  Margin="0,0,0,8"/>
+                                            <TextBlock Text="启用" 
+                                                       Style="{StaticResource LiquidGlassLabelStyle}"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="FadeInOutDisable"
+                                            Grid.Column="2"
+                                            Height="80"
+                                            Style="{StaticResource RenderPerfButtonStyle}"
+                                            Click="FadeInOut_Click"
+                                            Tag="Disable">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Path Data="M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.08L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.74,7.13 11.35,7 12,7Z" 
+                                                  Fill="#B0B0C0" 
+                                                  Width="24" 
+                                                  Height="24"
+                                                  Stretch="Uniform"
+                                                  Margin="0,0,0,8"/>
+                                            <TextBlock Text="禁用" 
+                                                       Style="{StaticResource LiquidGlassTextStyle}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                
+                                <!-- 速率 -->
+                                <TextBlock Text="速率" 
+                                           Style="{StaticResource LiquidGlassSubtitleStyle}"
+                                           Margin="0,0,0,12"/>
+                                <ComboBox x:Name="WallpaperSpeed"
+                                          Style="{StaticResource GlassComboBoxStyle}" 
+                                          Width="120"
+                                          HorizontalAlignment="Left"
+                                          Margin="0,0,0,24"
+                                          SelectedIndex="0">
+                                    <ComboBoxItem Content="常规"/>
+                                    <ComboBoxItem Content="快速"/>
+                                    <ComboBoxItem Content="慢速"/>
+                                </ComboBox>
+                                
+                                <!-- 锁屏 -->
+                                <TextBlock Text="锁屏" 
+                                           Style="{StaticResource LiquidGlassSubtitleStyle}"
+                                           Margin="0,0,0,12"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="8"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0"
+                                            Style="{StaticResource YellowButtonStyle}">
+                                        <TextBlock Text="解除组织管理" 
+                                                   VerticalAlignment="Center"/>
+                                    </Button>
+                                    <Button Grid.Column="2"
+                                            Style="{StaticResource RenderPerfButtonStyle}"
+                                            Width="120"
+                                            Height="36">
+                                        <TextBlock Text="查看说明" 
+                                                   Foreground="#FFFFFF" 
+                                                   FontSize="13"
+                                                   VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- 下载管理页面 -->
+                            <StackPanel x:Name="Page3" Visibility="Collapsed">
+                                <TextBlock Text="本地下载管理" 
+                                           Style="{StaticResource LiquidGlassTitleStyle}"
+                                           Margin="0,0,0,24"/>
+                                
+                                <!-- 存储路径 -->
+                                <TextBlock Text="存储路径" 
+                                           Style="{StaticResource LiquidGlassSubtitleStyle}"
+                                           Margin="0,0,0,12"/>
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" 
+                                            Background="#1E1E2E"
+                                            BorderBrush="#404050"
+                                            BorderThickness="1"
+                                            CornerRadius="8"
+                                            Height="44"
+                                            Margin="0,0,12,0">
+                                        <TextBlock x:Name="DownloadPath" 
+                                                   Text="C:\\Users\\admin\\AppData\\Roaming\\Hao Wallpaper\\WallpaperDownload"
+                                                   Style="{StaticResource LiquidGlassTextStyle}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="12,0"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </Border>
+                                    <Button Grid.Column="1"
+                                            Style="{StaticResource RenderPerfButtonStyle}"
+                                            Height="44"
+                                            Padding="16,0"
+                                            Click="BrowseDownloadPath_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Data="M20,6H12L10,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8A2,2 0 0,0 20,6M20,18H4V8H20V18Z" 
+                                                  Fill="#FFFFFF" 
+                                                  Width="16" 
+                                                  Height="16"
+                                                  Stretch="Uniform"/>
+                                            <TextBlock Text="更换存储目录" 
+                                                       Foreground="#FFFFFF" 
+                                                       FontSize="13"
+                                                       Margin="8,0,0,0"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                                <TextBlock Text="下载的壁纸文件将保存到此目录下" 
+                                           Style="{StaticResource LiquidGlassTextStyle}"
+                                           Foreground="#808090"
+                                           Margin="0,0,0,24"/>
+                                
+                                <!-- 下载统计 -->
+                                <TextBlock Text="下载统计" 
+                                           Style="{StaticResource LiquidGlassSubtitleStyle}"
+                                           Margin="0,0,0,12"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                                    <TextBlock Foreground="#B0B0C0" FontSize="13">
+                                        <Run Text="下载中: "/>
+                                        <Run Text="0" Foreground="#6B8DD6" FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                    <TextBlock Foreground="#B0B0C0" FontSize="13" Margin="24,0,0,0">
+                                        <Run Text="等待中: "/>
+                                        <Run Text="0" Foreground="#E8A838" FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                    <TextBlock Foreground="#B0B0C0" FontSize="13" Margin="24,0,0,0">
+                                        <Run Text="已完成: "/>
+                                        <Run Text="1" Foreground="#4CAF50" FontWeight="SemiBold"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                
+                                <!-- 管理下载 -->
+                                <TextBlock Text="管理下载" 
+                                           Style="{StaticResource LiquidGlassSubtitleStyle}"
+                                           Margin="0,0,0,12"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="12"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0"
+                                            Style="{StaticResource RenderPerfButtonStyle}"
+                                            Background="#8B3A3A"
+                                            BorderBrush="#A05050"
+                                            Width="140"
+                                            Height="44">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" 
+                                                  Fill="#FFFFFF" 
+                                                  Width="16" 
+                                                  Height="16"
+                                                  Stretch="Uniform"/>
+                                            <TextBlock Text="清空已下载" 
+                                                       Foreground="#FFFFFF" 
+                                                       FontSize="13"
+                                                       Margin="8,0,0,0"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Grid.Column="2"
+                                            Style="{StaticResource RenderPerfButtonStyle}"
+                                            Width="140"
+                                            Height="44">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Data="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" 
+                                                  Fill="#FFFFFF" 
+                                                  Width="16" 
+                                                  Height="16"
+                                                  Stretch="Uniform"/>
+                                            <TextBlock Text="打开存储目录" 
+                                                       Foreground="#FFFFFF" 
+                                                       FontSize="13"
+                                                       Margin="8,0,0,0"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- 检查更新页面 -->
+                            <StackPanel x:Name="Page4" Visibility="Collapsed">
+                                <TextBlock Text="检查更新" 
+                                           Style="{StaticResource LiquidGlassTitleStyle}"
+                                           Margin="0,0,0,24"/>
+                                
+                                <Border Style="{StaticResource GlassCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="当前版本" 
+                                                   Style="{StaticResource LiquidGlassTextStyle}"
+                                                   Margin="0,0,0,8"/>
+                                        <TextBlock Text="v1.0.0" 
+                                                   Style="{StaticResource LiquidGlassSubtitleStyle}"
+                                                   FontSize="18"
+                                                   Margin="0,0,0,20"/>
+                                        <Button Style="{StaticResource RenderPerfButtonStyle}"
+                                                Width="120"
+                                                Height="40"
+                                                HorizontalAlignment="Left">
+                                            <TextBlock Text="检查更新" 
+                                                       Style="{StaticResource LiquidGlassLabelStyle}"
+                                                       VerticalAlignment="Center"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 开机自启页面 -->
+                            <StackPanel x:Name="Page5" Visibility="Collapsed">
+                                <TextBlock Text="开机自启" 
+                                           Style="{StaticResource LiquidGlassTitleStyle}"
+                                           Margin="0,0,0,24"/>
+                                
+                                <Border Style="{StaticResource GlassCardStyle}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" 
+                                                   Text="开机自动启动" 
+                                                   Style="{StaticResource LiquidGlassLabelStyle}"
+                                                   VerticalAlignment="Center"/>
+                                        <CheckBox Grid.Column="1" 
+                                                  x:Name="AutoStart"
+                                                  Style="{StaticResource GlassToggleStyle}"
+                                                  VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 关于软件页面 -->
+                            <StackPanel x:Name="Page6" Visibility="Collapsed">
+                                <TextBlock Text="关于软件" 
+                                           Style="{StaticResource LiquidGlassTitleStyle}"
+                                           Margin="0,0,0,24"/>
+                                
+                                <Border Style="{StaticResource GlassCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Luxe Wallpaper" 
+                                                   Style="{StaticResource LiquidGlassTitleStyle}"
+                                                   FontSize="22"
+                                                   Margin="0,0,0,8"/>
+                                        <TextBlock Text="版本 1.0.0" 
+                                                   Style="{StaticResource LiquidGlassTextStyle}"
+                                                   Margin="0,0,0,20"/>
+                                        <TextBlock Text="一款精美的动态壁纸应用，让您的桌面焕然一新。" 
+                                                   Style="{StaticResource LiquidGlassTextStyle}"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,20"/>
+                                        <TextBlock Text="© 2024 Luxe Wallpaper. All rights reserved." 
+                                                   Style="{StaticResource LiquidGlassTextStyle}"
+                                                   Foreground="#808090"
+                                                   FontSize="11"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 退出授权页面 -->
+                            <StackPanel x:Name="Page7" Visibility="Collapsed">
+                                <TextBlock Text="退出授权" 
+                                           Style="{StaticResource LiquidGlassTitleStyle}"
+                                           Margin="0,0,0,24"/>
+                                
+                                <Border Style="{StaticResource GlassCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="退出当前账号" 
+                                                   Style="{StaticResource LiquidGlassLabelStyle}"
+                                                   Margin="0,0,0,8"/>
+                                        <TextBlock Text="退出后将无法使用付费功能" 
+                                                   Style="{StaticResource LiquidGlassTextStyle}"
+                                                   Margin="0,0,0,20"/>
+                                        <Button Style="{StaticResource RenderPerfButtonStyle}"
+                                                Width="120"
+                                                Height="40"
+                                                HorizontalAlignment="Left">
+                                            <TextBlock Text="退出登录" 
+                                                       Style="{StaticResource LiquidGlassLabelStyle}"
+                                                       VerticalAlignment="Center"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

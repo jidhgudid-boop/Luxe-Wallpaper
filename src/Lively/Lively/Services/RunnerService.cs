@@ -1,4 +1,4 @@
-﻿using Lively.Common.Helpers;
+﻿﻿﻿﻿using Lively.Common.Helpers;
 using Lively.Common.Helpers.Pinvoke;
 using Lively.Common.Services;
 using Lively.Core.Display;
@@ -32,16 +32,9 @@ namespace Lively.Services
                 Logger.Warn("Process is running elevated, UI may not function properly.");
             }
 
-            if (PackageUtil.IsRunningAsPackaged)
-            {
-                fileName = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\")), "Lively.UI.WinUI.exe");
-                workingDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\"));
-            }
-            else
-            {
-                fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins", "UI", "Lively.UI.WinUI.exe");
-                workingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins", "UI");
-            }
+            // 启动新集成的LuxeWallpaper UI
+            fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LuxeWallpaper.exe");
+            workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
         }
 
         public void ShowUI()
